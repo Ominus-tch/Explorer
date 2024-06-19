@@ -11,6 +11,7 @@ Welcome to Explorer, a fast and efficient file explorer designed to streamline y
 ## TODO
 
 - **GUI Revamp**: Enhance the user interface to make it more visually appealing and user-friendly.
+- **Linux Suppoert**: Add support for linux or even other platforms.
 
 We are continuously working to improve Explorer and appreciate any feedback or suggestions you may have. Thank you for using Explorer!
 
