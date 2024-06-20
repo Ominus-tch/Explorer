@@ -597,13 +597,17 @@ namespace File {
 					{
 						uint64_t folderSize = 0;
 
+						resultsMutex.lock();
 						auto it = FolderSizeCache.find(folder.path);
 						if (it != FolderSizeCache.end())
 							folderSize = it->second;
 						else if (getFolderSizeOnSearch)
+						{
+							resultsMutex.unlock();
 							folderSize = GetFolderSize(folder.path);
+							resultsMutex.lock();
+						}
 
-						resultsMutex.lock();
 						//results.push_back(folder.path);
 						results2.push_back({ folder.path, folder.last_changed, "", folderSize, depth});
 						resultsMutex.unlock();
@@ -625,7 +629,11 @@ namespace File {
 					if (it != FolderSizeCache.end())
 						folderSize = it->second;
 					else if (getFolderSizeOnSearch)
+					{
+						resultsMutex.unlock();
 						folderSize = GetFolderSize(folder.path);
+						resultsMutex.lock();
+					}
 
 					//results.push_back(folder.path);
 					results2.push_back({ folder.path, folder.last_changed, "", folderSize, depth });
@@ -769,7 +777,11 @@ namespace File {
 		std::cout << "Starting search...\n";
 
 		results.clear();
+
+		resultsMutex.lock();
 		results2.clear();
+		resultsMutex.unlock();
+
 		bytesRead = 0;
 
 		activeThreads = (int)drives.size();
